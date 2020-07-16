@@ -437,6 +437,7 @@ int main()
     std::cout << "iPhone price = " << iPhone6S.getCurrentPrice( 10.0f ) << std::endl;
     std::cout << "Xiaomi 3G DL speed = " << xiaomi4X.dataPlan.getDownloadSpeed( 3 ) << std::endl;
     std::cout << "iPhone 4G DL speed = " << iPhone6S.dataPlan.getDownloadSpeed() << std::endl;
+    std::cout << "Remaining battery for Diana = " << officeForDiana.mobilePhone.getRemainingBattery( 5, false) << std::endl;
     std::cout << "=======================================" << std::endl;
 
     std::cout << "good to go!" << std::endl;
