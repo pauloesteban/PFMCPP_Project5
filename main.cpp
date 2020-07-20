@@ -80,6 +80,7 @@ struct Ipad
     bool updateIos( float version, bool isEnoughStorage = true );
     void setIpadModel( bool isPro );
     void installApps( int newApps );
+    void printInstalledApps();
 };
 
 Ipad::Ipad( float version, std::string passcode)
@@ -132,6 +133,12 @@ void Ipad::installApps( int newApps )
         std::cout << "Total Installed Apps: " << installedApps << std::endl;
     }
 }
+
+void Ipad::printInstalledApps()
+{
+    std::cout << "iPad apps = " << this->installedApps << std::endl;
+}
+
 /*
  UDT 2:
  */
@@ -167,6 +174,7 @@ struct Housing
     float monthlyFee();
     void setWeeklyFee( float fee );
     void projectedFees( int planedYearsOfRental );
+    void printYearNetFees();
 };
 
 Housing::Housing( float fee, float percentage, bool includeServices )
@@ -213,6 +221,11 @@ void Housing::projectedFees( int plannedYearsOfRental )
         std::cout << "Year " << i + 1 << ": " << yearFeesFinal << std::endl;
         yearNetFees = yearFeesFinal;
     }
+}
+
+void Housing::printYearNetFees()
+{
+    std::cout << "Housing year net fees (USD) = " << this->yearNetFees << std::endl;   
 }
 
 Housing::Room::Room( bool independentBathroom, int sizeOfBed )
@@ -277,6 +290,7 @@ struct MobilePhone
     void setRetailPrice( float price );
     float getCurrentPrice( float depreciation );
     float getRemainingBattery( int usageHours, bool isCharging = false );
+    void printRemainingBattery();
 };
 
 MobilePhone::MobilePhone( bool isAndroidInstalled )
@@ -284,7 +298,7 @@ MobilePhone::MobilePhone( bool isAndroidInstalled )
   isAndroid( isAndroidInstalled ),
   remainingBattery( 100.0f )
 {
-    auto typeOfPhone = isAndroid?"Android":"iPhone";
+    auto typeOfPhone = isAndroid ? "Android" : "iPhone";
     std::cout << "Your mobile is an" << typeOfPhone << std::endl;
 }
 
@@ -302,7 +316,7 @@ float MobilePhone::getCurrentPrice( float depreciation )
 {
     if (isAndroid)
     {
-        retailPrice *= (1.0f - 0.01f * depreciation);
+        return retailPrice * (1.0f - 0.01f * depreciation);
     }
 
     return retailPrice;
@@ -321,6 +335,11 @@ float MobilePhone::getRemainingBattery( int usageHours, bool isCharging )
     }
 
     return remainingBattery;
+}
+
+void MobilePhone::printRemainingBattery()
+{
+    std::cout << "Mobile phone remaining battery (%) = " << this->remainingBattery << std::endl;
 }
 
 MobilePhone::DataPlan::DataPlan()
@@ -376,6 +395,7 @@ float MobilePhone::DataPlan::getDownloadSpeed( int availableNetwork )
             return downloadSpeed;
     }
 }
+
 /*
  new UDT 4:
  */
@@ -387,6 +407,9 @@ struct WorkEnvironment
 
     WorkEnvironment();
     ~WorkEnvironment();
+
+    void printMobilePhoneRemainingBatt();
+    void printHousingYearNetFees();
 };
 
 WorkEnvironment::WorkEnvironment()
@@ -401,6 +424,17 @@ WorkEnvironment::~WorkEnvironment()
 {
     std::cout << "This WAS a work environment in a room w/ " << housing.room.windows << " windows."<< std::endl;
 }
+
+void WorkEnvironment::printHousingYearNetFees()
+{
+    this->housing.printYearNetFees();
+}
+
+void WorkEnvironment::printMobilePhoneRemainingBatt()
+{
+    this->mobilePhone.printRemainingBattery();
+}
+
 /*
  new UDT 5:
  */
@@ -457,12 +491,13 @@ int main()
 
     std::cout << "=======================================" << std::endl;
     std::cout << "iPad Mini 1 apps = " << iPadMini1.installedApps << std::endl;
+    iPadMini1.printInstalledApps();
     std::cout << "iPad Mini 4 apps = " << iPadMini4.installedApps << std::endl;
-    std::cout << "Xiaomi price = " << xiaomi4X.getCurrentPrice( 10.0f ) << std::endl;
-    std::cout << "iPhone price = " << iPhone6S.getCurrentPrice( 10.0f ) << std::endl;
-    std::cout << "Xiaomi 3G DL speed = " << xiaomi4X.dataPlan.getDownloadSpeed( 3 ) << std::endl;
-    std::cout << "iPhone 4G DL speed = " << iPhone6S.dataPlan.getDownloadSpeed() << std::endl;
-    std::cout << "Remaining battery for Diana = " << officeForDiana.mobilePhone.getRemainingBattery( 5, false) << std::endl;
+    iPadMini4.printInstalledApps();
+    std::cout << "Paulo's office year net fees (USD) = " << officeForPaulo.housing.yearNetFees << std::endl;
+    officeForPaulo.printHousingYearNetFees();
+    std::cout << "Remaining battery for Diana (%) = " << officeForDiana.mobilePhone.getRemainingBattery( 5, false ) << std::endl;
+    officeForDiana.printMobilePhoneRemainingBatt();
     std::cout << "=======================================" << std::endl;
 
     std::cout << "good to go!" << std::endl;
