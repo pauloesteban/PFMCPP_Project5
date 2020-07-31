@@ -20,9 +20,9 @@ Create a branch named Part3
     This means if you had something like the following in your main() previously: 
 */
 #if false
- Axe axe;
- std::cout << "axe sharpness: " << axe.sharpness << "\n";
- #endif
+Axe axe;
+std::cout << "axe sharpness: " << axe.sharpness << "\n";
+#endif
  /*
     you would update that to use your wrappers:
     
@@ -50,6 +50,7 @@ You don't have to do this, you can keep your current object name and just change
 
 
 #include <iostream>
+#include "LeakedObjectDetector.h"
 /*
  UDT 1:
  */
@@ -68,6 +69,8 @@ struct Ipad
     void setIpadModel( bool isPro );
     void installApps( int newApps );
     void printInstalledApps();
+
+    JUCE_LEAK_DETECTOR( Ipad )
 };
 
 Ipad::Ipad( float version, std::string passcode)
@@ -126,6 +129,21 @@ void Ipad::printInstalledApps()
     std::cout << "iPad apps = " << this->installedApps << std::endl;
 }
 
+struct IpadWrapper
+{
+    IpadWrapper( Ipad* ptr ) : iPadPtr( ptr )
+    {
+
+    }
+
+    ~IpadWrapper()
+    {
+        delete iPadPtr;
+    }
+
+    Ipad* iPadPtr = nullptr;
+};
+
 /*
  UDT 2:
  */
@@ -145,6 +163,23 @@ struct Housing
         void installMoreWindows( int additionalWindows = 1 );
         void installCCTV();
         void changeBed( int newBedSize );
+
+        JUCE_LEAK_DETECTOR( Room )
+    };
+
+    struct RoomWrapper
+    {
+        RoomWrapper( Room* ptr ) : roomPtr( ptr )
+        {
+
+        }
+
+        ~RoomWrapper()
+        {
+            delete roomPtr;
+        }
+
+        Room* roomPtr = nullptr;
     };
     
     bool isRented = false;
@@ -153,7 +188,7 @@ struct Housing
     bool areServicesIncluded = false;
     float increasePercentage;
 
-    Room room;
+    RoomWrapper room;
     
     Housing( float weeklyFee, float increasePercentage, bool includeServices );
     ~Housing();
@@ -162,6 +197,8 @@ struct Housing
     void setWeeklyFee( float fee );
     void projectedFees( int planedYearsOfRental );
     void printYearNetFees();
+
+    JUCE_LEAK_DETECTOR( Housing )
 };
 
 Housing::Housing( float fee, float percentage, bool includeServices )
@@ -169,7 +206,7 @@ Housing::Housing( float fee, float percentage, bool includeServices )
    yearNetFees (12.0f * weeklyFee),
    areServicesIncluded( includeServices ),
    increasePercentage( percentage ),
-   room( false, 1 )
+   room( new Room( false, 1 ) )
 {
     std::cout << "Housing at USD " << weeklyFee << "per week, ctor." << std::endl;
 }
@@ -242,6 +279,22 @@ void Housing::Room::changeBed( int newBedSize )
     bedSize = newBedSize;
     std::cout << "Be aware. Free space in your room has changed." << std::endl;
 }
+
+struct HousingWrapper
+{
+    HousingWrapper( Housing* ptr ) : housingPtr( ptr )
+    {
+
+    }
+
+    ~HousingWrapper()
+    {
+        delete housingPtr;
+    }
+
+    Housing* housingPtr = nullptr;
+};
+
 /*
  UDT 3:
  */
@@ -261,6 +314,23 @@ struct MobilePhone
         void addBalance( float balance = 1.0f, bool isBeforeRollOver = true );
         float getRemainingGigaBytes();
         float getDownloadSpeed( int availableNetwork = 4 );
+
+        JUCE_LEAK_DETECTOR( DataPlan )
+    };
+
+    struct DataPlanWrapper
+    {
+        DataPlanWrapper( DataPlan* ptr ) : dataPlanPtr( ptr )
+        {
+
+        }
+
+        ~DataPlanWrapper()
+        {
+            delete dataPlanPtr;
+        }
+
+        DataPlan* dataPlanPtr = nullptr;
     };
     
     int typeOfNetwork = 4;
@@ -269,7 +339,7 @@ struct MobilePhone
     bool isAndroid;
     float remainingBattery;
 
-    DataPlan dataPlan;
+    DataPlanWrapper dataPlan;
     
     MobilePhone( bool isAndroid );
     ~MobilePhone();
@@ -278,12 +348,15 @@ struct MobilePhone
     float getCurrentPrice( float depreciation );
     float getRemainingBattery( int usageHours, bool isCharging = false );
     void printRemainingBattery();
+
+    JUCE_LEAK_DETECTOR( MobilePhone )
 };
 
 MobilePhone::MobilePhone( bool isAndroidInstalled )
 : usageInHours( 0 ),
   isAndroid( isAndroidInstalled ),
-  remainingBattery( 100.0f )
+  remainingBattery( 100.0f ),
+  dataPlan( new DataPlan() )
 {
     auto typeOfPhone = isAndroid ? "Android" : "iPhone";
     std::cout << "Your mobile is an" << typeOfPhone << std::endl;
@@ -383,6 +456,21 @@ float MobilePhone::DataPlan::getDownloadSpeed( int availableNetwork )
     }
 }
 
+struct MobilePhoneWrapper
+{
+    MobilePhoneWrapper( MobilePhone* ptr ) : mobilePhonePtr( ptr )
+    {
+
+    }
+
+    ~MobilePhoneWrapper()
+    {
+        delete mobilePhonePtr;
+    }
+
+    MobilePhone* mobilePhonePtr = nullptr;
+};
+
 /*
  new UDT 4:
  */
@@ -397,6 +485,8 @@ struct WorkEnvironment
 
     void printMobilePhoneRemainingBatt();
     void printHousingYearNetFees();
+
+    JUCE_LEAK_DETECTOR( WorkEnvironment )
 };
 
 WorkEnvironment::WorkEnvironment()
@@ -409,7 +499,7 @@ WorkEnvironment::WorkEnvironment()
 
 WorkEnvironment::~WorkEnvironment()
 {
-    std::cout << "This WAS a work environment in a room w/ " << housing.room.windows << " windows."<< std::endl;
+    std::cout << "This WAS a work environment in a room w/ " << housing.room.roomPtr->windows << " windows."<< std::endl;
 }
 
 void WorkEnvironment::printHousingYearNetFees()
@@ -422,6 +512,21 @@ void WorkEnvironment::printMobilePhoneRemainingBatt()
     this->mobilePhone.printRemainingBattery();
 }
 
+struct WorkEnvironmentWrapper
+{
+    WorkEnvironmentWrapper( WorkEnvironment* ptr ) : workEnvironmentPtr( ptr )
+    {
+
+    }
+
+    ~WorkEnvironmentWrapper()
+    {
+        delete workEnvironmentPtr;
+    }
+
+    WorkEnvironment* workEnvironmentPtr = nullptr;
+};
+
 /*
  new UDT 5:
  */
@@ -432,6 +537,8 @@ struct StudyEnvironment
 
     StudyEnvironment();
     ~StudyEnvironment();
+
+    JUCE_LEAK_DETECTOR( StudyEnvironment )
 };
 
 StudyEnvironment::StudyEnvironment()
@@ -445,6 +552,22 @@ StudyEnvironment::~StudyEnvironment()
 {
     std::cout << "This WAS a study environment for USD " << housing.monthlyFee() << " per month" << std::endl;
 }
+
+struct StudyEnvironmentWrapper
+{
+    StudyEnvironmentWrapper( StudyEnvironment* ptr ) : studyEnvironmentPtr( ptr )
+    {
+
+    }
+
+    ~StudyEnvironmentWrapper()
+    {
+        delete studyEnvironmentPtr;
+    }
+
+    StudyEnvironment* studyEnvironmentPtr = nullptr;
+};
+
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
  Commit your changes by clicking on the Source Control panel on the left, entering a message, and click [Commit and push].
@@ -459,32 +582,32 @@ StudyEnvironment::~StudyEnvironment()
 #include <iostream>
 int main()
 {
-    Ipad iPadMini1( 9.0f, "0000" );
-    Ipad iPadMini4( 13.1f, "5757" );
-    Housing studentHousing( 50.0f, 0.0f, true );
-    Housing coupleHousing( 200.0f, 10.0f, false );
-    MobilePhone xiaomi4X( true );
-    MobilePhone iPhone6S( false );
+    IpadWrapper iPadMini1( new Ipad( 9.0f, "0000" ) );
+    IpadWrapper iPadMini4( new Ipad( 13.1f, "5757" ) );
+    HousingWrapper studentHousing( new Housing( 50.0f, 0.0f, true ) );
+    HousingWrapper coupleHousing( new Housing( 200.0f, 10.0f, false ) );
+    MobilePhoneWrapper xiaomi4X( new MobilePhone( true ) );
+    MobilePhoneWrapper iPhone6S( new MobilePhone( false ) );
 
-    WorkEnvironment officeForPaulo;
-    WorkEnvironment officeForDiana;
-    StudyEnvironment lectureSpace;
-    StudyEnvironment zoomMeetingSpace;
+    WorkEnvironmentWrapper officeForPaulo( new WorkEnvironment() );
+    WorkEnvironmentWrapper officeForDiana( new WorkEnvironment() );
+    StudyEnvironmentWrapper lectureSpace( new StudyEnvironment() );
+    StudyEnvironmentWrapper zoomMeetingSpace( new StudyEnvironment() );
 
-    iPadMini1.installApps( 1 );
-    iPadMini4.installApps( 10 );
-    xiaomi4X.setRetailPrice( 150.0f );
-    iPhone6S.setRetailPrice( 500.0f );
+    iPadMini1.iPadPtr->installApps( 1 );
+    iPadMini4.iPadPtr->installApps( 10 );
+    xiaomi4X.mobilePhonePtr->setRetailPrice( 150.0f );
+    iPhone6S.mobilePhonePtr->setRetailPrice( 500.0f );
 
     std::cout << "=======================================" << std::endl;
-    std::cout << "iPad Mini 1 apps = " << iPadMini1.installedApps << std::endl;
-    iPadMini1.printInstalledApps();
-    std::cout << "iPad Mini 4 apps = " << iPadMini4.installedApps << std::endl;
-    iPadMini4.printInstalledApps();
-    std::cout << "Paulo's office year net fees (USD) = " << officeForPaulo.housing.yearNetFees << std::endl;
-    officeForPaulo.printHousingYearNetFees();
-    std::cout << "Remaining battery for Diana (%) = " << officeForDiana.mobilePhone.getRemainingBattery( 5, false ) << std::endl;
-    officeForDiana.printMobilePhoneRemainingBatt();
+    std::cout << "iPad Mini 1 apps = " << iPadMini1.iPadPtr->installedApps << std::endl;
+    iPadMini1.iPadPtr->printInstalledApps();
+    std::cout << "iPad Mini 4 apps = " << iPadMini4.iPadPtr->installedApps << std::endl;
+    iPadMini4.iPadPtr->printInstalledApps();
+    std::cout << "Paulo's office year net fees (USD) = " << officeForPaulo.workEnvironmentPtr->housing.yearNetFees << std::endl;
+    officeForPaulo.workEnvironmentPtr->printHousingYearNetFees();
+    std::cout << "Remaining battery for Diana (%) = " << officeForDiana.workEnvironmentPtr->mobilePhone.getRemainingBattery( 5, false ) << std::endl;
+    officeForDiana.workEnvironmentPtr->printMobilePhoneRemainingBatt();
     std::cout << "=======================================" << std::endl;
 
     std::cout << "good to go!" << std::endl;
