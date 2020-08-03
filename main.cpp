@@ -42,61 +42,6 @@
 /*
  UDT 1:
  */
-Ipad::Ipad( float version, std::string passcode)
-: iosMajorVersion( version ),
-  fourDigitPasscode( passcode )
-{
-    std::cout << "iPad " << iosMajorVersion << " ctor" << std::endl;
-}
-
-Ipad::~Ipad()
-{
-    std::cout << "iPad " << iosMajorVersion << " dtor" << std::endl;
-}
-
-bool Ipad::updateIos( float version, bool isEnoughStorage )
-{
-    if( isEnoughStorage )
-    {
-        if( iosMajorVersion < version )
-        {
-            std::cout << "Upgrading to iOS " << version << "." << std::endl;
-            iosMajorVersion = version;
-            return true;
-        }
-        else
-        {
-            std::cout << "iPad already on latest iOS version." << std::endl;
-            return false;
-        }
-    }
-
-    std::cout << "Not enough space for upgrading." << std::endl;
-    return false;
-}
-
-void Ipad::setIpadModel( bool isPro )
-{
-    isProModel = isPro;
-    auto model = isProModel ? "iPad Pro." : "normal iPad.";
-
-    std::cout << "You have " << model << std::endl;
-}
-
-void Ipad::installApps( int newApps )
-{
-    for( int i = 0; i < newApps; ++i )
-    {
-        std::cout << "Installing app " << i + 1 << " out of " << newApps << std::endl;
-        ++installedApps;
-        std::cout << "Total Installed Apps: " << installedApps << std::endl;
-    }
-}
-
-void Ipad::printInstalledApps()
-{
-    std::cout << "iPad apps = " << this->installedApps << std::endl;
-}
 
 struct IpadWrapper
 {
@@ -116,85 +61,6 @@ struct IpadWrapper
 /*
  UDT 2:
  */
-Housing::Housing( float fee, float percentage, bool includeServices )
-:  weeklyFee( fee ),
-   yearNetFees (12.0f * weeklyFee),
-   areServicesIncluded( includeServices ),
-   increasePercentage( percentage ),
-   room( new Room( false, 1 ) )
-{
-    std::cout << "Housing at USD " << weeklyFee << "per week, ctor." << std::endl;
-}
-
-Housing::~Housing()
-{
-    std::cout << "Housing dtor." << std::endl;
-}
-
-float Housing::monthlyFee()
-{
-    return weeklyFee * 4.0f;
-}
-
-void Housing::setWeeklyFee( float fee )
-{
-    if( areServicesIncluded )
-    {
-        weeklyFee = fee * 1.2f;
-    }
-    else
-    {
-        weeklyFee = fee;
-    }
-
-    std::cout << "Your weekly fee is USD " << weeklyFee << std::endl;
-}
-
-void Housing::projectedFees( int plannedYearsOfRental )
-{
-    yearNetFees = 12.0f * monthlyFee();
-    
-    for( int i = 0; i < plannedYearsOfRental; ++i )
-    {
-        float yearFeesFinal = (1.0f + increasePercentage) * yearNetFees;
-        std::cout << "Year " << i + 1 << ": " << yearFeesFinal << std::endl;
-        yearNetFees = yearFeesFinal;
-    }
-}
-
-void Housing::printYearNetFees()
-{
-    std::cout << "Housing year net fees (USD) = " << this->yearNetFees << std::endl;   
-}
-
-Housing::Room::Room( bool independentBathroom, int sizeOfBed )
-: hasIndependentBathroom( independentBathroom ),
-  bedSize( sizeOfBed )
-{
-    std::cout << "A " << areaInSqFt << " per week with " << windows << " windows." << std::endl;
-}
-
-Housing::Room::~Room()
-{
-    std::cout << "Room dtor" << std::endl;
-}
-
-void Housing::Room::installMoreWindows( int additionalWindows )
-{
-    windows += additionalWindows;
-}
-
-void Housing::Room::installCCTV()
-{
-    hasCCTV = true;
-}
-
-void Housing::Room::changeBed( int newBedSize )
-{
-    bedSize = newBedSize;
-    std::cout << "Be aware. Free space in your room has changed." << std::endl;
-}
-
 struct HousingWrapper
 {
     HousingWrapper( Housing* ptr ) : housingPtr( ptr )
@@ -213,110 +79,6 @@ struct HousingWrapper
 /*
  UDT 3:
  */
-MobilePhone::MobilePhone( bool isAndroidInstalled )
-: usageInHours( 0 ),
-  isAndroid( isAndroidInstalled ),
-  remainingBattery( 100.0f ),
-  dataPlan( new DataPlan() )
-{
-    auto typeOfPhone = isAndroid ? "Android" : "iPhone";
-    std::cout << "Your mobile is an" << typeOfPhone << std::endl;
-}
-
-MobilePhone::~MobilePhone()
-{
-    std::cout << "Phone dtor" << std::endl;
-}
-
-void MobilePhone::setRetailPrice( float price )
-{
-    retailPrice = price;
-}
-
-float MobilePhone::getCurrentPrice( float depreciation )
-{
-    if (isAndroid)
-    {
-        return retailPrice * (1.0f - 0.01f * depreciation);
-    }
-
-    return retailPrice;
-}
-
-float MobilePhone::getRemainingBattery( int usageHours, bool isCharging )
-{
-    usageInHours = static_cast<float>( usageHours );
-
-    if ( ! isCharging )
-    {
-        for (int i = 0; i < usageHours; ++i)
-        {
-            remainingBattery *= 0.95f;
-        }
-    }
-
-    return remainingBattery;
-}
-
-void MobilePhone::printRemainingBattery()
-{
-    std::cout << "Mobile phone remaining battery (%) = " << this->remainingBattery << std::endl;
-}
-
-MobilePhone::DataPlan::DataPlan()
-: downloadSpeed( 50.0f ),
-  balanceInGBytes( 0.0f ),
-  balanceInUSD( 0.0f )
-{
-    std::cout << "Empty DataPlan ctor" << std::endl;
-}
-
-MobilePhone::DataPlan::~DataPlan()
-{
-    std::cout<< "DataPlan dtor" << std::endl;
-}
-
-void MobilePhone::DataPlan::addBalance( float balance , bool isBeforeRollOver )
-{
-    if( isBeforeRollOver && isRollOver )
-    {
-        balanceInUSD += balance;
-    }
-    else
-    {
-        balanceInUSD = balance;
-    }
-
-    balanceInGBytes = 2.0f * balance;
-}
-
-float MobilePhone::DataPlan::getRemainingGigaBytes()
-{
-    if( isPrepaid )
-    {
-        return balanceInGBytes;
-    }
-    else
-    {
-        std::cout << "You have a contract with unlimited data!" << std::endl;
-
-        return 0.0f;
-    }
-}
-
-float MobilePhone::DataPlan::getDownloadSpeed( int availableNetwork )
-{
-    switch( availableNetwork )
-    {
-        case 2:
-            return downloadSpeed / 4.0f;
-        case 3:
-            return downloadSpeed / 2.0f;
-        default:
-            return downloadSpeed;
-    }
-}
-
 struct MobilePhoneWrapper
 {
     MobilePhoneWrapper( MobilePhone* ptr ) : mobilePhonePtr( ptr )
@@ -335,29 +97,6 @@ struct MobilePhoneWrapper
 /*
  new UDT 4:
  */
-WorkEnvironment::WorkEnvironment()
-: housing( 100.0f, 5.0f, false ),
-  mobilePhone( true ),
-  iPad( 13.1f, "8898" )
-{
-    std::cout << "This is a work environment" << std::endl;
-}
-
-WorkEnvironment::~WorkEnvironment()
-{
-    std::cout << "This WAS a work environment in a room w/ " << housing.room.roomPtr->windows << " windows."<< std::endl;
-}
-
-void WorkEnvironment::printHousingYearNetFees()
-{
-    this->housing.printYearNetFees();
-}
-
-void WorkEnvironment::printMobilePhoneRemainingBatt()
-{
-    this->mobilePhone.printRemainingBattery();
-}
-
 struct WorkEnvironmentWrapper
 {
     WorkEnvironmentWrapper( WorkEnvironment* ptr ) : workEnvironmentPtr( ptr )
@@ -376,18 +115,6 @@ struct WorkEnvironmentWrapper
 /*
  new UDT 5:
  */
-StudyEnvironment::StudyEnvironment()
-: housing( 50.0f, 0.0f, true ),
-  iPad( 13.1f, "4857" )
-{
-    std::cout << "This is a study environment" << std::endl;
-}
-
-StudyEnvironment::~StudyEnvironment()
-{
-    std::cout << "This WAS a study environment for USD " << housing.monthlyFee() << " per month" << std::endl;
-}
-
 struct StudyEnvironmentWrapper
 {
     StudyEnvironmentWrapper( StudyEnvironment* ptr ) : studyEnvironmentPtr( ptr )
