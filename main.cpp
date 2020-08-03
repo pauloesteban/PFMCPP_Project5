@@ -43,92 +43,21 @@
  UDT 1:
  */
 
-struct IpadWrapper
-{
-    IpadWrapper( Ipad* ptr ) : iPadPtr( ptr )
-    {
-
-    }
-
-    ~IpadWrapper()
-    {
-        delete iPadPtr;
-    }
-
-    Ipad* iPadPtr = nullptr;
-};
-
 /*
  UDT 2:
  */
-struct HousingWrapper
-{
-    HousingWrapper( Housing* ptr ) : housingPtr( ptr )
-    {
-
-    }
-
-    ~HousingWrapper()
-    {
-        delete housingPtr;
-    }
-
-    Housing* housingPtr = nullptr;
-};
 
 /*
  UDT 3:
  */
-struct MobilePhoneWrapper
-{
-    MobilePhoneWrapper( MobilePhone* ptr ) : mobilePhonePtr( ptr )
-    {
-
-    }
-
-    ~MobilePhoneWrapper()
-    {
-        delete mobilePhonePtr;
-    }
-
-    MobilePhone* mobilePhonePtr = nullptr;
-};
 
 /*
  new UDT 4:
  */
-struct WorkEnvironmentWrapper
-{
-    WorkEnvironmentWrapper( WorkEnvironment* ptr ) : workEnvironmentPtr( ptr )
-    {
-
-    }
-
-    ~WorkEnvironmentWrapper()
-    {
-        delete workEnvironmentPtr;
-    }
-
-    WorkEnvironment* workEnvironmentPtr = nullptr;
-};
 
 /*
  new UDT 5:
  */
-struct StudyEnvironmentWrapper
-{
-    StudyEnvironmentWrapper( StudyEnvironment* ptr ) : studyEnvironmentPtr( ptr )
-    {
-
-    }
-
-    ~StudyEnvironmentWrapper()
-    {
-        delete studyEnvironmentPtr;
-    }
-
-    StudyEnvironment* studyEnvironmentPtr = nullptr;
-};
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
