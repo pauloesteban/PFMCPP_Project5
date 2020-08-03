@@ -42,25 +42,6 @@
 /*
  UDT 1:
  */
-struct Ipad
-{
-    int installedApps = 0;
-    float iosMajorVersion;
-    std::string fourDigitPasscode;
-    bool isBackedUp = true;
-    bool isProModel = false;
-    
-    Ipad( float version, std::string passcode );
-    ~Ipad();
-    
-    bool updateIos( float version, bool isEnoughStorage = true );
-    void setIpadModel( bool isPro );
-    void installApps( int newApps );
-    void printInstalledApps();
-
-    JUCE_LEAK_DETECTOR( Ipad )
-};
-
 Ipad::Ipad( float version, std::string passcode)
 : iosMajorVersion( version ),
   fourDigitPasscode( passcode )
@@ -135,60 +116,6 @@ struct IpadWrapper
 /*
  UDT 2:
  */
-struct Housing
-{
-    struct Room
-    {
-        bool hasIndependentBathroom;
-        bool hasCCTV = false;
-        int windows = 1;
-        int bedSize;
-        float areaInSqFt = 20;
-
-        Room( bool independentBathroom, int sizeOfBed );
-        ~Room();
-
-        void installMoreWindows( int additionalWindows = 1 );
-        void installCCTV();
-        void changeBed( int newBedSize );
-
-        JUCE_LEAK_DETECTOR( Room )
-    };
-
-    struct RoomWrapper
-    {
-        RoomWrapper( Room* ptr ) : roomPtr( ptr )
-        {
-
-        }
-
-        ~RoomWrapper()
-        {
-            delete roomPtr;
-        }
-
-        Room* roomPtr = nullptr;
-    };
-    
-    bool isRented = false;
-    float weeklyFee;
-    float yearNetFees;
-    bool areServicesIncluded = false;
-    float increasePercentage;
-
-    RoomWrapper room;
-    
-    Housing( float weeklyFee, float increasePercentage, bool includeServices );
-    ~Housing();
-    
-    float monthlyFee();
-    void setWeeklyFee( float fee );
-    void projectedFees( int planedYearsOfRental );
-    void printYearNetFees();
-
-    JUCE_LEAK_DETECTOR( Housing )
-};
-
 Housing::Housing( float fee, float percentage, bool includeServices )
 :  weeklyFee( fee ),
    yearNetFees (12.0f * weeklyFee),
@@ -286,60 +213,6 @@ struct HousingWrapper
 /*
  UDT 3:
  */
-struct MobilePhone
-{
-    struct DataPlan
-    {
-        bool isPrepaid = true;
-        bool isRollOver = true;
-        float downloadSpeed;
-        float balanceInGBytes;
-        float balanceInUSD;
-
-        DataPlan();
-        ~DataPlan();
-
-        void addBalance( float balance = 1.0f, bool isBeforeRollOver = true );
-        float getRemainingGigaBytes();
-        float getDownloadSpeed( int availableNetwork = 4 );
-
-        JUCE_LEAK_DETECTOR( DataPlan )
-    };
-
-    struct DataPlanWrapper
-    {
-        DataPlanWrapper( DataPlan* ptr ) : dataPlanPtr( ptr )
-        {
-
-        }
-
-        ~DataPlanWrapper()
-        {
-            delete dataPlanPtr;
-        }
-
-        DataPlan* dataPlanPtr = nullptr;
-    };
-    
-    int typeOfNetwork = 4;
-    float retailPrice = 0.0f;
-    float usageInHours;
-    bool isAndroid;
-    float remainingBattery;
-
-    DataPlanWrapper dataPlan;
-    
-    MobilePhone( bool isAndroid );
-    ~MobilePhone();
-    
-    void setRetailPrice( float price );
-    float getCurrentPrice( float depreciation );
-    float getRemainingBattery( int usageHours, bool isCharging = false );
-    void printRemainingBattery();
-
-    JUCE_LEAK_DETECTOR( MobilePhone )
-};
-
 MobilePhone::MobilePhone( bool isAndroidInstalled )
 : usageInHours( 0 ),
   isAndroid( isAndroidInstalled ),
@@ -462,21 +335,6 @@ struct MobilePhoneWrapper
 /*
  new UDT 4:
  */
-struct WorkEnvironment
-{
-    Housing housing;
-    MobilePhone mobilePhone;
-    Ipad iPad;
-
-    WorkEnvironment();
-    ~WorkEnvironment();
-
-    void printMobilePhoneRemainingBatt();
-    void printHousingYearNetFees();
-
-    JUCE_LEAK_DETECTOR( WorkEnvironment )
-};
-
 WorkEnvironment::WorkEnvironment()
 : housing( 100.0f, 5.0f, false ),
   mobilePhone( true ),
@@ -518,17 +376,6 @@ struct WorkEnvironmentWrapper
 /*
  new UDT 5:
  */
-struct StudyEnvironment
-{
-    Housing housing;
-    Ipad iPad;
-
-    StudyEnvironment();
-    ~StudyEnvironment();
-
-    JUCE_LEAK_DETECTOR( StudyEnvironment )
-};
-
 StudyEnvironment::StudyEnvironment()
 : housing( 50.0f, 0.0f, true ),
   iPad( 13.1f, "4857" )
