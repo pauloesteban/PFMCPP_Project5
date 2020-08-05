@@ -1,3 +1,10 @@
+#pragma once
+
+#include "Housing.h"
+#include "MobilePhone.h"
+#include "Ipad.h"
+#include "LeakedObjectDetector.h"
+
 struct WorkEnvironment
 {
     Housing housing;

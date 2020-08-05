@@ -1,3 +1,6 @@
+#include <iostream>
+#include "Ipad.h"
+
 Ipad::Ipad( float version, std::string passcode)
 : iosMajorVersion( version ),
   fourDigitPasscode( passcode )

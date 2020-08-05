@@ -1,3 +1,6 @@
+#include "Housing.h"
+#include "Room.h"
+
 Housing::Housing( float fee, float percentage, bool includeServices )
 :  weeklyFee( fee ),
    yearNetFees (12.0f * weeklyFee),
@@ -47,33 +50,5 @@ void Housing::projectedFees( int plannedYearsOfRental )
 void Housing::printYearNetFees()
 {
     std::cout << "Housing year net fees (USD) = " << this->yearNetFees << std::endl;   
-}
-
-Housing::Room::Room( bool independentBathroom, int sizeOfBed )
-: hasIndependentBathroom( independentBathroom ),
-  bedSize( sizeOfBed )
-{
-    std::cout << "A " << areaInSqFt << " per week with " << windows << " windows." << std::endl;
-}
-
-Housing::Room::~Room()
-{
-    std::cout << "Room dtor" << std::endl;
-}
-
-void Housing::Room::installMoreWindows( int additionalWindows )
-{
-    windows += additionalWindows;
-}
-
-void Housing::Room::installCCTV()
-{
-    hasCCTV = true;
-}
-
-void Housing::Room::changeBed( int newBedSize )
-{
-    bedSize = newBedSize;
-    std::cout << "Be aware. Free space in your room has changed." << std::endl;
 }
 

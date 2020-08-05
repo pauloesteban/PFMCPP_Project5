@@ -1,3 +1,5 @@
+#include "Wrappers.h"
+
 IpadWrapper::IpadWrapper( Ipad* ptr ) : iPadPtr( ptr )
 {
 
@@ -51,3 +53,5 @@ StudyEnvironmentWrapper::~StudyEnvironmentWrapper()
 {
     delete studyEnvironmentPtr;
 }
+
+

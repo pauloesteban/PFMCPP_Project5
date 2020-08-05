@@ -1,3 +1,7 @@
+#pragma once
+
+#include "LeakedObjectDetector.h"
+
 struct Ipad
 {
     int installedApps = 0;

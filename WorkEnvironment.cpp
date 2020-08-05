@@ -1,3 +1,5 @@
+#include "WorkEnvironment.h"
+
 WorkEnvironment::WorkEnvironment()
 : housing( 100.0f, 5.0f, false ),
   mobilePhone( true ),

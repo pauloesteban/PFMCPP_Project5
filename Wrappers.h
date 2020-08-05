@@ -1,3 +1,11 @@
+#pragma once
+
+#include "Ipad.h"
+#include "Housing.h"
+#include "MobilePhone.h"
+#include "WorkEnvironment.h"
+#include "StudyEnvironment.h"
+
 struct IpadWrapper
 {
     IpadWrapper( Ipad* ptr );
@@ -37,3 +45,5 @@ struct StudyEnvironmentWrapper
 
     StudyEnvironment* studyEnvironmentPtr = nullptr;
 };
+
+

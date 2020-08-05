@@ -1,3 +1,6 @@
+#include "MobilePhone.h"
+#include "DataPlan.h"
+
 MobilePhone::MobilePhone( bool isAndroidInstalled )
 : usageInHours( 0 ),
   isAndroid( isAndroidInstalled ),
@@ -46,59 +49,5 @@ float MobilePhone::getRemainingBattery( int usageHours, bool isCharging )
 void MobilePhone::printRemainingBattery()
 {
     std::cout << "Mobile phone remaining battery (%) = " << this->remainingBattery << std::endl;
-}
-
-MobilePhone::DataPlan::DataPlan()
-: downloadSpeed( 50.0f ),
-  balanceInGBytes( 0.0f ),
-  balanceInUSD( 0.0f )
-{
-    std::cout << "Empty DataPlan ctor" << std::endl;
-}
-
-MobilePhone::DataPlan::~DataPlan()
-{
-    std::cout<< "DataPlan dtor" << std::endl;
-}
-
-void MobilePhone::DataPlan::addBalance( float balance , bool isBeforeRollOver )
-{
-    if( isBeforeRollOver && isRollOver )
-    {
-        balanceInUSD += balance;
-    }
-    else
-    {
-        balanceInUSD = balance;
-    }
-
-    balanceInGBytes = 2.0f * balance;
-}
-
-float MobilePhone::DataPlan::getRemainingGigaBytes()
-{
-    if( isPrepaid )
-    {
-        return balanceInGBytes;
-    }
-    else
-    {
-        std::cout << "You have a contract with unlimited data!" << std::endl;
-
-        return 0.0f;
-    }
-}
-
-float MobilePhone::DataPlan::getDownloadSpeed( int availableNetwork )
-{
-    switch( availableNetwork )
-    {
-        case 2:
-            return downloadSpeed / 4.0f;
-        case 3:
-            return downloadSpeed / 2.0f;
-        default:
-            return downloadSpeed;
-    }
 }
 
