@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Room.h"
+struct Room;
 struct DataPlan;
 
 struct RoomWrapper

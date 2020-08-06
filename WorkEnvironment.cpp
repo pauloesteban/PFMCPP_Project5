@@ -10,7 +10,7 @@ WorkEnvironment::WorkEnvironment()
 
 WorkEnvironment::~WorkEnvironment()
 {
-    std::cout << "This WAS a work environment in a room w/ " << housing.room.roomPtr->windows << " windows."<< std::endl;
+    std::cout << "This WAS a work environment in a room w/ " << /*housing.room.roomPtr->windows <<*/ " windows."<< std::endl;
 }
 
 void WorkEnvironment::printHousingYearNetFees()
