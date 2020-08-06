@@ -23,14 +23,7 @@ float Housing::monthlyFee()
 
 void Housing::setWeeklyFee( float fee )
 {
-    if( areServicesIncluded )
-    {
-        weeklyFee = fee * 1.2f;
-    }
-    else
-    {
-        weeklyFee = fee;
-    }
+    weeklyFee = areServicesIncluded ? fee * 1.2f : fee;
 
     std::cout << "Your weekly fee is USD " << weeklyFee << std::endl;
 }
