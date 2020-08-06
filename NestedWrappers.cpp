@@ -1,4 +1,5 @@
 #include "NestedWrappers.h"
+#include "DataPlan.h"
 
 RoomWrapper::RoomWrapper( Room* ptr ) : roomPtr( ptr )
 {

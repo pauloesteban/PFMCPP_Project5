@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Room.h"
-#include "DataPlan.h"
+struct DataPlan;
 
 struct RoomWrapper
 {
