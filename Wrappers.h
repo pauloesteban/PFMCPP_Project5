@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Ipad.h"
-#include "Housing.h"
-#include "MobilePhone.h"
-#include "WorkEnvironment.h"
-#include "StudyEnvironment.h"
+struct Ipad;
+struct Housing;
+struct MobilePhone;
+struct WorkEnvironment;
+struct StudyEnvironment;
 
 struct IpadWrapper
 {

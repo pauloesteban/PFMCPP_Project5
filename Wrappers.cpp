@@ -1,4 +1,9 @@
 #include "Wrappers.h"
+#include "Ipad.h"
+#include "Housing.h"
+#include "MobilePhone.h"
+#include "WorkEnvironment.h"
+#include "StudyEnvironment.h"
 
 IpadWrapper::IpadWrapper( Ipad* ptr ) : iPadPtr( ptr )
 {
